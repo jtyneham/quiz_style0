@@ -619,3 +619,27 @@
       animation: buttonPress 180ms ease-out;
     }
 
+    #rnglScreen .rngl-home-button {
+      appearance: none;
+      width: auto;
+      min-width: 0;
+      height: 2.75rem;
+      min-height: 2.75rem;
+      padding: 0 1rem;
+      border: 0;
+      border-radius: 0.65rem;
+      background: #ffffff;
+      color: #000000;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: 0 0.22rem 0.7rem rgba(0, 0, 0, 0.16);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+
+    #rnglScreen .rngl-home-button:active {
+      transform: scale(0.96);
+      box-shadow: 0 0.1rem 0.35rem rgba(0, 0, 0, 0.14);
+    }
+

@@ -586,6 +586,7 @@
       .difficulty-control button {
         padding: 0.48em 0.58em;
       }
+    }
 
     @media (max-width: 34rem) {
       :root {
@@ -634,15 +635,18 @@ button,input{font:inherit}
   color:#3d3d3d;font-size:var(--font-ui);cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
-.home-button{justify-self:start}
+.home-button{
+  appearance:none;justify-self:start;width:auto;min-width:0;height:2.75rem;
+  min-height:2.75rem;padding:0 1rem;border:0;border-radius:.65rem;
+  background:#fff;color:#000;font-size:1rem;font-weight:700;line-height:1;
+  white-space:nowrap;box-shadow:0 .22rem .7rem rgba(0,0,0,.16);
+  transition:transform 120ms ease,box-shadow 120ms ease;
+}
 .fullscreen-button{justify-self:center}
 .difficulty-control{justify-self:end}
-.home-button svg{
-  width:1.35em;height:1.35em;fill:none;stroke:currentColor;stroke-width:1.8;
-  stroke-linecap:round;stroke-linejoin:round;
-}
-.home-button:active,.fullscreen-button:active{transform:scale(.97)}
+.home-button:active{transform:scale(.96);box-shadow:0 .1rem .35rem rgba(0,0,0,.14)}
+.fullscreen-button:active{transform:scale(.97)}
 @media(max-width:34rem){
-  .home-button span,.fullscreen-button span{display:none}
-  .home-button,.fullscreen-button{width:2.4em}
+  .fullscreen-button span{display:none}
+  .fullscreen-button{width:2.4em}
 }
