@@ -193,7 +193,7 @@ function initializeHangmanPokemon(root, app) {
   const TOPIC_ORDER = [
     "Pokemon All Names",
     "Gen 1","Gen 2","Gen 3","Gen 4","Gen 5","Gen 6","Gen 7","Gen 8","Gen 9",
-    "Moves + Abilities","Moves","Abilities",
+    "Moves + Abilities","Moves","Abilities","Final Evolutions",
     ...TYPE_ORDER
   ];
   const availableTopics=new Set(POKEMON_WORDS.flatMap(entry=>entry.topics));
