@@ -1,4 +1,4 @@
-import { POKEMON_NAMES } from "../../data/hangman-pokemon-words.js";
+import { POKEMON_WORDS } from "../../data/missing-word-pokemon-words.js";
 
 let appAPI;
 
@@ -6,7 +6,7 @@ const templateHTML = `<div class="hangman-root">
 <div class="app">
   <main class="game-card" id="gameCard">
     <div class="status-row">
-      <div class="status-actions"><button class="home-button" id="homeButton" type="button" aria-label="Back to Home" title="Home">Home</button><button class="fullscreen-btn" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button></div>
+      <div class="status-actions"><button class="home-button" id="homeButton" type="button" aria-label="Back to Home" title="Home">Home</button><button class="fullscreen-btn" id="fullscreenBtn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button></div><button class="topics-btn" id="topicsBtn" type="button">Topics <span id="topicsCount">1</span></button>
 <span class="tries-text" id="triesText">0 / 6 misses</span>
     </div>
 
@@ -180,9 +180,16 @@ const templateHTML = `<div class="hangman-root">
 
   </main>
 </div>
+<div class="topics-overlay" id="topicsOverlay" aria-hidden="true"><div class="topics-sheet">
+<div class="topics-sheet-head"><div><div class="topics-title">Choose Topics</div><div class="topics-subtitle">Select one or more Pokémon categories</div></div><button class="topics-close" id="topicsClose">×</button></div>
+<div class="topics-actions-row"><button class="topics-mini-btn" id="selectAllTopics">All Topics</button><button class="topics-mini-btn" id="clearTopics">Clear</button></div>
+<div class="topics-grid" id="topicsGrid"></div>
+<div class="topics-footer"><button class="btn btn-ghost" id="cancelTopics">Cancel</button><button class="btn btn-primary" id="applyTopics">Apply</button></div>
+</div></div>
 </div>`;
 
 function initializeHangmanPokemon(root, app) {
+  const TOPICS=[...new Set(POKEMON_WORDS.flatMap(entry=>entry.topics))];
   const slots = root.getElementById("slots");
   const missesList = root.getElementById("missesList");
   const triesText = root.getElementById("triesText");
@@ -196,9 +203,11 @@ function initializeHangmanPokemon(root, app) {
   const solveUi = root.getElementById("solveUi");
   const solveText = root.getElementById("solveText");
   const solveCancelBtn = root.getElementById("solveCancelBtn");
+  const topicsBtn=root.getElementById("topicsBtn"),topicsCount=root.getElementById("topicsCount"),topicsOverlay=root.getElementById("topicsOverlay"),topicsGrid=root.getElementById("topicsGrid"),topicsClose=root.getElementById("topicsClose"),selectAllTopics=root.getElementById("selectAllTopics"),clearTopics=root.getElementById("clearTopics"),cancelTopics=root.getElementById("cancelTopics"),applyTopics=root.getElementById("applyTopics");
 
   let answer="", guessed=new Set(), misses=[], wrongCount=0;
   let active=false, solveMode=false, solveBuffer="", confirmNewWord=false, confirmTimer=null;
+  let selectedTopics=new Set(["Pokemon All Names"]),draftTopics=new Set(["Pokemon All Names"]);
 
   let backspaceHoldTimer=null;
   let backspaceRepeatTimer=null;
@@ -235,12 +244,46 @@ function initializeHangmanPokemon(root, app) {
     hits.forEach(el=>{el.classList.remove("correct-hit");void el.offsetWidth;el.classList.add("correct-hit");});
     setTimeout(()=>hits.forEach(el=>el.classList.remove("correct-hit")),360);
   }
+  function getActivePool(){
+    if(!selectedTopics.size) return [];
+    return POKEMON_WORDS.filter(entry=>entry.topics.some(topic=>selectedTopics.has(topic)));
+  }
   function pickWord(){
-    let next=POKEMON_NAMES[Math.floor(Math.random()*POKEMON_NAMES.length)];
-    if(POKEMON_NAMES.length>1 && next===answer){
-      next=POKEMON_NAMES[(POKEMON_NAMES.indexOf(next)+1)%POKEMON_NAMES.length];
+    const pool=getActivePool();
+    if(!pool.length) return "";
+    let next=pool[Math.floor(Math.random()*pool.length)].word.toUpperCase();
+    if(pool.length>1&&next===answer){
+      const i=pool.findIndex(entry=>entry.word.toUpperCase()===next);
+      next=pool[(i+1)%pool.length].word.toUpperCase();
     }
     return next;
+  }
+  function renderTopicChoices(){
+    topicsGrid.innerHTML="";
+    TOPICS.forEach(topic=>{
+      const b=document.createElement("button");
+      b.type="button";b.className="topic-chip";b.textContent=topic;
+      b.classList.toggle("selected",draftTopics.has(topic));
+      b.addEventListener("click",()=>{
+        if(draftTopics.has(topic)) draftTopics.delete(topic); else draftTopics.add(topic);
+        renderTopicChoices();
+      });
+      topicsGrid.appendChild(b);
+    });
+  }
+  function updateTopicsLabel(){
+    topicsCount.textContent=selectedTopics.size===TOPICS.length?"All":selectedTopics.size;
+  }
+  function openTopics(){
+    draftTopics=new Set(selectedTopics);renderTopicChoices();
+    topicsOverlay.classList.add("open");topicsOverlay.setAttribute("aria-hidden","false");
+  }
+  function closeTopics(){
+    topicsOverlay.classList.remove("open");topicsOverlay.setAttribute("aria-hidden","true");
+  }
+  function applyTopicSelection(){
+    if(!draftTopics.size) return;
+    selectedTopics=new Set(draftTopics);updateTopicsLabel();closeTopics();startRound();
   }
 
   function resetKeys(){
@@ -466,6 +509,14 @@ function initializeHangmanPokemon(root, app) {
   });
 
 
+  topicsBtn.addEventListener("click",openTopics);
+  topicsClose.addEventListener("click",closeTopics);
+  cancelTopics.addEventListener("click",closeTopics);
+  selectAllTopics.addEventListener("click",()=>{draftTopics=new Set(TOPICS);renderTopicChoices();});
+  clearTopics.addEventListener("click",()=>{draftTopics.clear();renderTopicChoices();});
+  applyTopics.addEventListener("click",applyTopicSelection);
+  topicsOverlay.addEventListener("click",e=>{if(e.target===topicsOverlay)closeTopics();});
+
   const updateFullscreenButton = () => {
     const on = app.isFullscreen();
     fullscreenBtn.textContent = on ? "×" : "⛶";
@@ -484,6 +535,7 @@ function initializeHangmanPokemon(root, app) {
 
   app.onFullscreenChange(updateFullscreenButton);
   updateFullscreenButton();
+  updateTopicsLabel();
   startRound();
 }
 
