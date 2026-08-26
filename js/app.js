@@ -1,66 +1,65 @@
 import { initRandomLetter } from "./games/rngl.js";
 
-const screens = {
-  home: document.getElementById("homeScreen"),
-  rngl: document.getElementById("rnglScreen"),
-  placeholder: document.getElementById("placeholderScreen")
+const screens={
+  home:document.getElementById("homeScreen"),
+  rngl:document.getElementById("rnglScreen"),
+  missingword:document.getElementById("missingWordScreen"),
+  placeholder:document.getElementById("placeholderScreen")
 };
+const fullscreenCallbacks=new Set();
+let current="home";
+let missingWordLoaded=false;
 
-const fullscreenCallbacks = new Set();
-let current = "home";
-
-function haptic(ms=14){
-  if ("vibrate" in navigator) navigator.vibrate(ms);
-}
-
-function isFullscreen(){
-  return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-}
-
+function haptic(ms=14){if("vibrate" in navigator)navigator.vibrate(ms)}
+function isFullscreen(){return Boolean(document.fullscreenElement||document.webkitFullscreenElement)}
 async function toggleFullscreen(){
   try{
     if(isFullscreen()){
-      if(document.exitFullscreen) await document.exitFullscreen();
-      else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+      if(document.exitFullscreen)await document.exitFullscreen();
+      else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
     }else{
       const root=document.documentElement;
-      if(root.requestFullscreen) await root.requestFullscreen({navigationUI:"hide"});
-      else if(root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+      if(root.requestFullscreen)await root.requestFullscreen({navigationUI:"hide"});
+      else if(root.webkitRequestFullscreen)root.webkitRequestFullscreen();
     }
-  }catch(err){ console.warn(err); }
+  }catch(err){console.warn(err)}
 }
-
-function notifyFullscreen(){
-  fullscreenCallbacks.forEach(fn => fn());
-  updateHomeFullscreen();
-}
-
+function notifyFullscreen(){fullscreenCallbacks.forEach(fn=>fn())}
 document.addEventListener("fullscreenchange",notifyFullscreen);
 document.addEventListener("webkitfullscreenchange",notifyFullscreen);
 
-const api = {
-  haptic,
-  isFullscreen,
-  toggleFullscreen,
-  onFullscreenChange(fn){ fullscreenCallbacks.add(fn); return ()=>fullscreenCallbacks.delete(fn); },
-  showHome(){ showScreen("home"); }
+const api={
+  haptic,isFullscreen,toggleFullscreen,
+  onFullscreenChange(fn){fullscreenCallbacks.add(fn);return()=>fullscreenCallbacks.delete(fn)},
+  showHome(){showScreen("home")},
+  isScreenActive(name){return current===name}
 };
 
 function showScreen(name){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  Object.values(screens).forEach(screen=>screen.classList.remove("active"));
   screens[name].classList.add("active");
   current=name;
-  history.replaceState(null,"", name==="home" ? location.pathname : `#${name}`);
+  history.replaceState(null,"",name==="home"?location.pathname:`#${name}`);
 }
 
-function openTile(tile){
+async function openTile(tile){
   const file=tile.dataset.file;
-  const name=tile.dataset.name || "Game";
+  const name=tile.dataset.name||"Game";
   haptic(18);
 
   if(file==="rngl.html"){
     initRandomLetter(screens.rngl,api);
     showScreen("rngl");
+    return;
+  }
+
+  if(file==="missingword.html"){
+    if(!missingWordLoaded){
+      const module=await import("./games/missing-word.js");
+      module.registerMissingWord(api);
+      missingWordLoaded=true;
+    }
+    showScreen("missingword");
     return;
   }
 
@@ -74,21 +73,8 @@ document.querySelectorAll(".app-tile").forEach(tile=>{
   tile.addEventListener("click",()=>openTile(tile));
 });
 
-document.getElementById("placeholderHomeButton").addEventListener("click",()=>{haptic(12);showScreen("home")});
-
-const hubFullscreenButton=document.getElementById("hubFullscreenButton");
-const hubFullscreenLabel=document.getElementById("hubFullscreenLabel");
-const hubFullscreenIcon=document.getElementById("hubFullscreenIcon");
-
-function updateHomeFullscreen(){
-  const active=isFullscreen();
-  hubFullscreenLabel.textContent=active?"Exit":"Fullscreen";
-  hubFullscreenButton.setAttribute("aria-label",active?"Exit fullscreen":"Enter fullscreen");
-  hubFullscreenIcon.innerHTML=active
-    ? '<path d="M3 8h5V3"></path><path d="M21 8h-5V3"></path><path d="M21 16h-5v5"></path><path d="M3 16h5v5"></path>'
-    : '<path d="M8 3H3v5"></path><path d="M16 3h5v5"></path><path d="M21 16v5h-5"></path><path d="M3 16v5h5"></path>';
-}
-hubFullscreenButton.addEventListener("click",()=>{haptic(12);toggleFullscreen()});
-updateHomeFullscreen();
+document.getElementById("placeholderHomeButton").addEventListener("click",()=>{
+  haptic(12);showScreen("home");
+});
 
 window.addEventListener("popstate",()=>showScreen("home"));

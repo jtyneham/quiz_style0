@@ -10,22 +10,10 @@
 </head>
 <body>
   <div id="quizApp" class="quiz-shell">
-    <section id="homeScreen" class="screen screen-home active" aria-label="Quiz home">
-      <header class="hub-topbar">
-        <h1 class="hub-brand">Quiz</h1>
-        <button id="hubFullscreenButton" class="hub-fullscreen-button" type="button" aria-label="Enter fullscreen">
-          <svg id="hubFullscreenIcon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8 3H3v5"></path><path d="M16 3h5v5"></path>
-            <path d="M21 16v5h-5"></path><path d="M3 16v5h5"></path>
-          </svg>
-          <span id="hubFullscreenLabel">Fullscreen</span>
-        </button>
-      </header>
+    <section id="homeScreen" class="screen screen-home active" aria-label="Quiz games">
       <main class="hub-main">
-        
-      <div class="content">
-
         <section class="game-grid" aria-label="Games">
+          
 
           <button class="app-tile" type="button" data-file="missingword.html" data-name="Missing Word">
             <div class="tile-card">
@@ -87,32 +75,13 @@
             <span class="tile-title">Random Letter</span>
           </button>
 
+        
         </section>
-
-        <h2 class="tools-heading">Tools</h2>
-
-        <section class="tools" aria-label="Tools">
-          <button class="app-tile" type="button" data-file="topicticker.html" data-name="Topic Ticker">
-            <div class="tile-card">
-              <svg class="icon ticker-icon" viewBox="0 0 120 120" aria-hidden="true">
-                <path class="ticker-line" d="M17 35h30M58 35h44"></path>
-                <path class="ticker-line" d="M17 60h49M77 60h25"></path>
-                <path class="ticker-line" d="M17 85h20M48 85h54"></path>
-                <circle class="ticker-dot" cx="52" cy="35" r="3.5"></circle>
-                <circle class="ticker-dot" cx="71" cy="60" r="3.5"></circle>
-                <circle class="ticker-dot" cx="42" cy="85" r="3.5"></circle>
-              </svg>
-            </div>
-            <span class="tile-title">Topic Ticker</span>
-          </button>
-        </section>
-
-      </div>
-    
       </main>
     </section>
 
     <section id="rnglScreen" class="screen screen-rngl" aria-label="Random Letter">
+      
       
   <div class="rngl-app">
     <header class="rngl-topbar">
@@ -241,19 +210,20 @@
       </div>
     </aside>
   </div>
+    </section>
 
-  
+    <section id="missingWordScreen" class="screen screen-missing-word" aria-label="Missing Word">
+      <quiz-missing-word></quiz-missing-word>
     </section>
 
     <section id="placeholderScreen" class="screen screen-placeholder" aria-live="polite">
       <button id="placeholderHomeButton" class="placeholder-home" type="button">Home</button>
       <div class="placeholder-card">
         <div class="placeholder-title" id="placeholderTitle">Game</div>
-        <div class="placeholder-text">This screen is next in the integration queue.</div>
+        <div class="placeholder-text">This game is next in the integration queue.</div>
       </div>
     </section>
   </div>
-
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
