@@ -668,8 +668,10 @@ button,input{font:inherit}
 .home-button,.fullscreen-button{color:var(--nier-ink);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
 .home-button{height:2.35rem;min-height:2.35rem;padding:0 .85rem;background:transparent;border:1px solid var(--nier-line);border-radius:0;box-shadow:none;font-size:.8rem}
 .home-button:hover,.home-button:focus-visible{background:var(--accent);color:var(--nier-hi)}
-.fullscreen-button{font-size:clamp(.78rem,2.2vw,.9rem)}
-.fullscreen-button svg{stroke-width:1.3;stroke-linecap:square;stroke-linejoin:miter}
+.fullscreen-button{width:2.25rem;height:2.25rem;min-height:2.25rem;padding:0;border:1px solid var(--nier-line);border-radius:0;background:transparent;font-size:1rem;line-height:1}
+.fullscreen-button span{display:none}
+.fullscreen-button svg{width:1.05rem;height:1.05rem;stroke-width:1.3;stroke-linecap:square;stroke-linejoin:miter}
+.fullscreen-button:hover,.fullscreen-button:focus-visible{background:var(--accent);color:var(--nier-hi)}
 .difficulty-control{gap:0;padding:0;background:transparent;border-radius:0;box-shadow:none;border:1px solid var(--nier-line)}
 .difficulty-control button{border-radius:0;padding:.55em .8em;color:var(--nier-ink);font-size:clamp(.68rem,2vw,.82rem);font-weight:500;letter-spacing:.12em;text-transform:uppercase;border-right:1px solid var(--nier-soft)}
 .difficulty-control button:last-child{border-right:0}.difficulty-control button.active{background:var(--accent);color:var(--nier-hi)}
