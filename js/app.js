@@ -1,0 +1,94 @@
+import { initRandomLetter } from "./games/rngl.js";
+
+const screens = {
+  home: document.getElementById("homeScreen"),
+  rngl: document.getElementById("rnglScreen"),
+  placeholder: document.getElementById("placeholderScreen")
+};
+
+const fullscreenCallbacks = new Set();
+let current = "home";
+
+function haptic(ms=14){
+  if ("vibrate" in navigator) navigator.vibrate(ms);
+}
+
+function isFullscreen(){
+  return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+}
+
+async function toggleFullscreen(){
+  try{
+    if(isFullscreen()){
+      if(document.exitFullscreen) await document.exitFullscreen();
+      else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }else{
+      const root=document.documentElement;
+      if(root.requestFullscreen) await root.requestFullscreen({navigationUI:"hide"});
+      else if(root.webkitRequestFullscreen) root.webkitRequestFullscreen();
+    }
+  }catch(err){ console.warn(err); }
+}
+
+function notifyFullscreen(){
+  fullscreenCallbacks.forEach(fn => fn());
+  updateHomeFullscreen();
+}
+
+document.addEventListener("fullscreenchange",notifyFullscreen);
+document.addEventListener("webkitfullscreenchange",notifyFullscreen);
+
+const api = {
+  haptic,
+  isFullscreen,
+  toggleFullscreen,
+  onFullscreenChange(fn){ fullscreenCallbacks.add(fn); return ()=>fullscreenCallbacks.delete(fn); },
+  showHome(){ showScreen("home"); }
+};
+
+function showScreen(name){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[name].classList.add("active");
+  current=name;
+  history.replaceState(null,"", name==="home" ? location.pathname : `#${name}`);
+}
+
+function openTile(tile){
+  const file=tile.dataset.file;
+  const name=tile.dataset.name || "Game";
+  haptic(18);
+
+  if(file==="rngl.html"){
+    initRandomLetter(screens.rngl,api);
+    showScreen("rngl");
+    return;
+  }
+
+  document.getElementById("placeholderTitle").textContent=name;
+  showScreen("placeholder");
+}
+
+document.querySelectorAll(".app-tile").forEach(tile=>{
+  tile.addEventListener("pointerdown",()=>tile.classList.add("pressed"));
+  ["pointerup","pointercancel","pointerleave"].forEach(evt=>tile.addEventListener(evt,()=>tile.classList.remove("pressed")));
+  tile.addEventListener("click",()=>openTile(tile));
+});
+
+document.getElementById("placeholderHomeButton").addEventListener("click",()=>{haptic(12);showScreen("home")});
+
+const hubFullscreenButton=document.getElementById("hubFullscreenButton");
+const hubFullscreenLabel=document.getElementById("hubFullscreenLabel");
+const hubFullscreenIcon=document.getElementById("hubFullscreenIcon");
+
+function updateHomeFullscreen(){
+  const active=isFullscreen();
+  hubFullscreenLabel.textContent=active?"Exit":"Fullscreen";
+  hubFullscreenButton.setAttribute("aria-label",active?"Exit fullscreen":"Enter fullscreen");
+  hubFullscreenIcon.innerHTML=active
+    ? '<path d="M3 8h5V3"></path><path d="M21 8h-5V3"></path><path d="M21 16h-5v5"></path><path d="M3 16h5v5"></path>'
+    : '<path d="M8 3H3v5"></path><path d="M16 3h5v5"></path><path d="M21 16v5h-5"></path><path d="M3 16v5h5"></path>';
+}
+hubFullscreenButton.addEventListener("click",()=>{haptic(12);toggleFullscreen()});
+updateHomeFullscreen();
+
+window.addEventListener("popstate",()=>showScreen("home"));
