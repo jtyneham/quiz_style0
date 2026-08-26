@@ -4,11 +4,13 @@ const screens={
   home:document.getElementById("homeScreen"),
   rngl:document.getElementById("rnglScreen"),
   missingword:document.getElementById("missingWordScreen"),
+  missingwordpokemon:document.getElementById("missingWordPokemonScreen"),
   placeholder:document.getElementById("placeholderScreen")
 };
 const fullscreenCallbacks=new Set();
 let current="home";
 let missingWordLoaded=false;
+let missingWordPokemonLoaded=false;
 
 function haptic(ms=14){if("vibrate" in navigator)navigator.vibrate(ms)}
 function isFullscreen(){return Boolean(document.fullscreenElement||document.webkitFullscreenElement)}
@@ -60,6 +62,16 @@ async function openTile(tile){
       missingWordLoaded=true;
     }
     showScreen("missingword");
+    return;
+  }
+
+  if(file==="missingwordpokemon.html"){
+    if(!missingWordPokemonLoaded){
+      const module=await import("./games/missing-word-pokemon.js");
+      module.registerMissingWordPokemon(api);
+      missingWordPokemonLoaded=true;
+    }
+    showScreen("missingwordpokemon");
     return;
   }
 
