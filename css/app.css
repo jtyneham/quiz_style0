@@ -69,3 +69,99 @@ button{font:inherit}
   .tile-title{font-size:.72rem;margin-top:.2rem}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* ===== QUIZSTY / NieR:Automata-inspired reskin ===== */
+:root{
+  --nier-paper:#d8d4c4;
+  --nier-paper-hi:#e7e3d3;
+  --nier-paper-low:#c7c1ae;
+  --nier-ink:#34362f;
+  --nier-ink-2:#55564e;
+  --nier-muted:#77776d;
+  --nier-line:rgba(52,54,47,.46);
+  --nier-line-soft:rgba(52,54,47,.18);
+  --nier-select:#45473f;
+  --nier-select-text:#ece8d8;
+  --nier-hud:rgba(45,47,42,.88);
+  --page-bg:var(--nier-paper);
+  --card-bg:transparent;
+  --text:var(--nier-ink);
+  --accent:var(--nier-select);
+  --accent-hover:#383a34;
+  --radius-card:0;
+  --shadow-card:none;
+}
+html,body{background:var(--nier-paper);color:var(--nier-ink)}
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  letter-spacing:.018em;
+}
+.quiz-shell,.screen-home,.screen-rngl,.screen-missing-word,.screen-missing-word-pokemon,.screen-hangman,.screen-hangman-pokemon{
+  background-color:var(--nier-paper);
+  background-image:
+    linear-gradient(118deg, transparent 0 46%, rgba(61,62,55,.045) 46.1% 46.25%, transparent 46.35% 100%),
+    linear-gradient(28deg, transparent 0 72%, rgba(61,62,55,.035) 72.1% 72.22%, transparent 72.32% 100%),
+    radial-gradient(circle at 76% 24%, transparent 0 10.5rem, rgba(61,62,55,.04) 10.55rem 10.68rem, transparent 10.74rem),
+    radial-gradient(circle at 18% 78%, transparent 0 15rem, rgba(61,62,55,.03) 15.05rem 15.16rem, transparent 15.22rem);
+}
+.screen-home::before,.screen-home::after{
+  content:"";position:absolute;left:0;right:0;z-index:2;pointer-events:none;height:.55rem;
+  background:
+    linear-gradient(var(--nier-ink),var(--nier-ink)) center top/.100% .09rem no-repeat,
+    repeating-linear-gradient(135deg,transparent 0 .42rem,rgba(52,54,47,.65) .43rem .48rem,transparent .49rem .84rem);
+  opacity:.72;
+}
+.screen-home{position:relative}
+.screen-home::before{top:max(.8rem,env(safe-area-inset-top))}
+.screen-home::after{bottom:max(.8rem,env(safe-area-inset-bottom));transform:rotate(180deg)}
+.hub-main{padding-inline:max(clamp(1rem,6vw,5rem),env(safe-area-inset-left));}
+.game-grid{
+  width:min(92vw,56rem);height:auto;display:flex;flex-direction:column;align-items:stretch;justify-content:center;
+  gap:clamp(.24rem,.8dvh,.55rem);position:relative;padding-block:clamp(1rem,4dvh,3rem);
+}
+.game-grid::before{
+  content:"GAME SELECT";display:block;margin:0 0 clamp(.65rem,2dvh,1.4rem) .15rem;
+  color:var(--nier-ink-2);font-size:clamp(.72rem,1.8vw,.9rem);letter-spacing:.34em;font-weight:400;
+}
+.game-grid::after{
+  content:"";position:absolute;left:0;right:0;top:clamp(2.6rem,7dvh,4.6rem);height:1px;background:var(--nier-line-soft);
+}
+.app-tile{
+  width:100%;max-width:none;display:grid;grid-template-columns:clamp(2.8rem,8vw,4.5rem) minmax(0,1fr);grid-template-rows:1fr;
+  align-items:center;gap:clamp(.9rem,2.5vw,1.7rem);padding:.18rem .25rem;border:0;text-align:left;
+  opacity:0;transform:translateX(-.7rem);animation:tileIn .34s cubic-bezier(.2,.8,.2,1) forwards;color:var(--nier-ink);
+}
+.game-grid .app-tile:nth-child(5){grid-column:auto}
+@keyframes tileIn{to{opacity:1;transform:none}}
+.tile-card{
+  width:clamp(2.8rem,8vw,4.5rem);height:clamp(2.8rem,8vw,4.5rem);aspect-ratio:1;border-radius:0;
+  background:rgba(231,227,211,.45);border:1px solid var(--nier-line-soft);box-shadow:none;overflow:visible;
+  transition:background-color 120ms linear,border-color 120ms linear,transform 120ms ease;
+}
+.tile-title{
+  position:relative;display:flex;align-items:center;min-height:clamp(2.65rem,7vw,3.8rem);margin:0;padding:.55rem 1rem .55rem clamp(1rem,2.4vw,1.35rem);
+  font-size:clamp(.94rem,2.2vw,1.18rem);font-weight:500;letter-spacing:.09em;text-transform:uppercase;line-height:1.1;
+  border-top:1px solid var(--nier-line-soft);border-bottom:1px solid var(--nier-line-soft);
+  transition:background-color 120ms linear,color 120ms linear,padding-left 120ms ease;
+}
+.tile-title::before{content:"";position:absolute;left:.42rem;width:.26rem;height:.26rem;border:1px solid currentColor;transform:rotate(45deg);opacity:.65}
+.app-tile:hover .tile-card,.app-tile:focus-visible .tile-card{transform:none;background:rgba(69,71,63,.12);box-shadow:none;border-color:var(--nier-line)}
+.app-tile:hover .tile-title,.app-tile:focus-visible .tile-title,.app-tile:active .tile-title,.app-tile.pressed .tile-title{
+  color:var(--nier-select-text);background:var(--nier-select);padding-left:clamp(1.15rem,3vw,1.7rem);border-color:var(--nier-select);
+}
+.app-tile:focus-visible{outline:none}
+.app-tile:active .tile-card,.app-tile.pressed .tile-card{transform:scale(.975);box-shadow:none;background:rgba(69,71,63,.18)}
+.icon{width:58%;height:58%;stroke:var(--nier-ink);stroke-width:4.3;stroke-linecap:square;stroke-linejoin:miter;transition:none}
+.icon text,.missing-word-icon .mw-question,.pokemon-missing-icon .pokemon-question{fill:var(--nier-ink);stroke:var(--nier-paper-hi);stroke-width:2px;font-family:"Segoe UI",Arial,sans-serif}
+.pokemon-ball .top,.pokemon-ball .bottom,.pokemon-ball .center,.hangman-pokemon-icon circle:last-of-type{fill:transparent;stroke:var(--nier-ink)}
+@media(min-width:42rem){
+  .game-grid{display:flex;width:min(84vw,60rem);height:auto;gap:.38rem}
+  .app-tile{width:100%;grid-template-columns:4rem 1fr}
+  .tile-card{width:4rem;height:4rem}
+}
+@media(max-height:42rem) and (orientation:landscape){
+  .game-grid{display:flex;width:min(78vw,52rem);gap:.18rem;padding-block:.7rem}
+  .game-grid::before{margin-bottom:.35rem}.game-grid::after{top:2.15rem}
+  .app-tile{width:100%;grid-template-columns:2.7rem 1fr}
+  .tile-card{width:2.7rem;height:2.7rem}.tile-title{min-height:2.3rem;font-size:.76rem}
+}

@@ -175,9 +175,9 @@ export function initRandomLetter(root, app) {
         );
         wedge.setAttribute(
           "fill",
-          index % 2 === 0 ? "#edf1f5" : "#dfe5ec"
+          index % 2 === 0 ? "#d8d4c4" : "#c8c3b2"
         );
-        wedge.setAttribute("stroke", "#ffffff");
+        wedge.setAttribute("stroke", "#e5e0ce");
         wedge.setAttribute("stroke-width", "1.4");
         wheelSpinner.appendChild(wedge);
 
@@ -189,12 +189,12 @@ export function initRandomLetter(root, app) {
         text.setAttribute("y", point.y);
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("dominant-baseline", "middle");
-        text.setAttribute("fill", "#26303d");
+        text.setAttribute("fill", "#34362f");
         text.setAttribute("font-size", "14");
-        text.setAttribute("font-weight", "800");
+        text.setAttribute("font-weight", "500");
         text.setAttribute(
           "font-family",
-          "Inter, system-ui, sans-serif"
+          "Segoe UI, Arial, sans-serif"
         );
         text.setAttribute(
           "transform",
@@ -209,7 +209,7 @@ export function initRandomLetter(root, app) {
       rim.setAttribute("cy", "150");
       rim.setAttribute("r", "138");
       rim.setAttribute("fill", "none");
-      rim.setAttribute("stroke", "#cfd7e1");
+      rim.setAttribute("stroke", "#66675e");
       rim.setAttribute("stroke-width", "3");
       wheelSpinner.appendChild(rim);
     }
