@@ -654,3 +654,8 @@
 .generate-button{border-radius:0!important;border:1px solid #45473f!important;background:#45473f!important;color:#e7e3d3!important;box-shadow:none!important;font-size:clamp(.86rem,2.5vw,1rem)!important;font-weight:500!important;letter-spacing:.18em!important;text-transform:uppercase!important}.generate-button::before{content:"◆";margin-right:.65rem;font-size:.52rem}.generate-button:hover{background:#393b35!important}
 .ticker-shell{background:#3f413b!important;border-top:1px solid #686960!important}.ticker-viewport{border-bottom:1px solid rgba(232,228,213,.12)!important}.topic{color:#e8e4d5!important;font-weight:400!important;letter-spacing:.07em!important;text-transform:uppercase!important}.separator{color:#969487!important}.ticker-shell::before{content:"IDEA FEED // TOPIC STREAM";position:absolute;top:.3rem;left:.7rem;color:#aaa797;font-size:.48rem;letter-spacing:.18em;z-index:2}
 .wheel-svg path{filter:saturate(0)!important}.wheel-pointer{filter:saturate(0)!important}
+
+/* v3: icon-only fullscreen control */
+#rnglScreen .rngl-topbar #fullscreenButton{width:2.25rem!important;height:2.25rem!important;min-height:2.25rem!important;padding:0!important;border:1px solid rgba(52,54,47,.38)!important;border-radius:0!important;background:transparent!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+#rnglScreen .rngl-topbar #fullscreenButton #fullscreenLabel{display:none!important}
+#rnglScreen .rngl-topbar #fullscreenButton svg{width:1.05rem!important;height:1.05rem!important}

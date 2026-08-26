@@ -696,3 +696,11 @@ button,input{font:inherit}
 .slot{font-weight:500;letter-spacing:.02em}.slot.blank::after{height:.035em;border-radius:0;background:var(--nier-ink)}
 .action-button{position:relative;width:min(90vw,24rem);min-height:3.35rem;border:1px solid var(--accent);border-radius:0;background:var(--accent);color:var(--nier-hi);font-size:clamp(.88rem,2.5vw,1rem);font-weight:500;letter-spacing:.18em;text-transform:uppercase}
 .action-button::before{content:"◆";margin-right:.7rem;font-size:.55rem}.action-button:hover{background:var(--accent-hover)}.action-button.reveal-mode{background:#5d5f56}.action-button.generating,.action-button.generating:hover{background:#858579;border-color:#858579}
+
+/* v3: keep fullscreen clearly separate from difficulty on narrow screens */
+@media(max-width:34rem){
+  .topbar{grid-template-columns:auto auto minmax(0,1fr);column-gap:.55rem;align-items:center}
+  .home-button{grid-column:1;justify-self:start}
+  .fullscreen-button{grid-column:2;justify-self:start;margin:0}
+  .difficulty-control{grid-column:3;justify-self:end;margin-left:.45rem}
+}

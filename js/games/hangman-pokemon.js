@@ -146,8 +146,8 @@ const templateHTML = `<div class="hangman-root">
 
     <div>
       <div class="controls">
-        <button class="btn btn-secondary" id="solveBtn">Solve Word</button>
-        <button class="btn btn-primary" id="newWordBtn">New Word</button>
+        <button class="btn btn-secondary" id="solveBtn" type="button">Solve Word</button>
+        <button class="btn btn-primary" id="newWordBtn" type="button">New Word</button>
       </div>
       
     </div>
@@ -450,14 +450,27 @@ function initializeHangmanPokemon(root, app) {
 
   solveBtn.addEventListener("click",enterSolve);
   solveCancelBtn.addEventListener("click",leaveSolve);
-  newWordBtn.addEventListener("click",()=>{
-    if(!active){ startRound(); return; }
-    if(!confirmNewWord){
-      confirmNewWord=true; newWordBtn.textContent="New Word?"; newWordBtn.className="btn btn-danger";
-      clearTimeout(confirmTimer);
-      confirmTimer=setTimeout(()=>{confirmNewWord=false;newWordBtn.textContent="New Word";newWordBtn.className="btn btn-primary";},2200);
+  newWordBtn.addEventListener("click",(event)=>{
+    event.preventDefault();
+    app.haptic(12);
+    if(!active){
+      startRound();
       return;
     }
+    if(!confirmNewWord){
+      confirmNewWord=true;
+      newWordBtn.textContent="New Word?";
+      newWordBtn.className="btn btn-danger";
+      clearTimeout(confirmTimer);
+      confirmTimer=setTimeout(()=>{
+        confirmNewWord=false;
+        newWordBtn.textContent="New Word";
+        newWordBtn.className="btn btn-primary";
+      },2200);
+      return;
+    }
+    clearTimeout(confirmTimer);
+    confirmNewWord=false;
     startRound();
   });
 
