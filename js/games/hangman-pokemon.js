@@ -189,7 +189,15 @@ const templateHTML = `<div class="hangman-root">
 </div>`;
 
 function initializeHangmanPokemon(root, app) {
-  const TOPICS=[...new Set(POKEMON_WORDS.flatMap(entry=>entry.topics))];
+  const TYPE_ORDER = ["Normal","Fire","Water","Electric","Grass","Ice","Fighting","Poison","Ground","Flying","Psychic","Bug","Rock","Ghost","Dragon","Dark","Steel","Fairy"];
+  const TOPIC_ORDER = [
+    "Pokemon All Names",
+    "Gen 1","Gen 2","Gen 3","Gen 4","Gen 5","Gen 6","Gen 7","Gen 8","Gen 9",
+    "Moves + Abilities","Moves","Abilities",
+    ...TYPE_ORDER
+  ];
+  const availableTopics=new Set(POKEMON_WORDS.flatMap(entry=>entry.topics));
+  const TOPICS=TOPIC_ORDER.filter(topic=>availableTopics.has(topic));
   const slots = root.getElementById("slots");
   const missesList = root.getElementById("missesList");
   const triesText = root.getElementById("triesText");
