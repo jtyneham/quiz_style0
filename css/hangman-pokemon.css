@@ -1419,5 +1419,37 @@
   }
 
 
+
+  .status-actions{
+    display:flex;
+    align-items:center;
+    gap:.55rem;
+  }
+
+  .home-button{
+    appearance:none;
+    width:auto;
+    min-width:0;
+    height:2.75rem;
+    min-height:2.75rem;
+    padding:0 1rem;
+    border:0;
+    border-radius:.65rem;
+    background:#fff;
+    color:#000;
+    font-size:1rem;
+    font-weight:700;
+    line-height:1;
+    white-space:nowrap;
+    box-shadow:0 .22rem .7rem rgba(0,0,0,.16);
+    cursor:pointer;
+    transition:transform 120ms ease,box-shadow 120ms ease;
+  }
+
+  .home-button:active{
+    transform:scale(.96);
+    box-shadow:0 .1rem .35rem rgba(0,0,0,.14);
+  }
+
   .topics-btn,
   .topics-overlay{display:none!important}
