@@ -243,6 +243,10 @@ function initializeHangmanPokemon(root, app) {
     return next;
   }
 
+  function resetKeys(){
+    keyboard.querySelectorAll(".letter-key").forEach(k=>k.classList.remove("used","guessed-correct","guessed-wrong"));
+  }
+
   function startRound(){
     answer=pickWord(); guessed=new Set(); misses=[]; wrongCount=0; active=true;
     root.querySelectorAll(".draw-part").forEach(part=>part.classList.remove("drawn"));
@@ -450,27 +454,14 @@ function initializeHangmanPokemon(root, app) {
 
   solveBtn.addEventListener("click",enterSolve);
   solveCancelBtn.addEventListener("click",leaveSolve);
-  newWordBtn.addEventListener("click",(event)=>{
-    event.preventDefault();
-    app.haptic(12);
-    if(!active){
-      startRound();
-      return;
-    }
+  newWordBtn.addEventListener("click",()=>{
+    if(!active){ startRound(); return; }
     if(!confirmNewWord){
-      confirmNewWord=true;
-      newWordBtn.textContent="New Word?";
-      newWordBtn.className="btn btn-danger";
+      confirmNewWord=true; newWordBtn.textContent="New Word?"; newWordBtn.className="btn btn-danger";
       clearTimeout(confirmTimer);
-      confirmTimer=setTimeout(()=>{
-        confirmNewWord=false;
-        newWordBtn.textContent="New Word";
-        newWordBtn.className="btn btn-primary";
-      },2200);
+      confirmTimer=setTimeout(()=>{confirmNewWord=false;newWordBtn.textContent="New Word";newWordBtn.className="btn btn-primary";},2200);
       return;
     }
-    clearTimeout(confirmTimer);
-    confirmNewWord=false;
     startRound();
   });
 
